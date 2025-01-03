@@ -1,0 +1,94 @@
+
+CS303 Logic & Digital System Design Lab Report
+
+Laboratory Assignment #4
+-
+Matrix Input/Output
+Oğuz Özbal 32673
+
+
+
+Introduction:
+The goal of this lab is to create a Verilog module called “matrixops”. This module will manage input and output for a 4x4 matrix. It lets the user set values in the matrix and check what value is at a specific spot. The module will use state changes and make sure all operations have happened in positive edge of clock signal.
+
+Module Overview:
+This module has the following inputs and outputs:
+•	Inputs:
+o	clk: The clock signal.
+o	rst: Active-high reset signal.
+o	enter:  Input from user to activate functions.
+o	X: 2-bit input for the coordinates of the matrix.
+o	Y: 2-bit input for the coordinates of the matrix.
+
+•	Outputs:
+o	Z: Output signal representing a specific matrix point’s status.
+
+•	Parameters:
+o	HOLD: First state where the module holds for the user interaction.
+o	SET: State to hold matrix values entered by the user.
+o	CHECK: State for checking the matrix value in a specific coordinate.
+
+•	Registers:
+o	matrix_data: 16-bit register representing 4x4 matrix.
+o	current_state: 3-bit register representing the current FSM state.
+o	input_count: To keep track of input count.
+o	temp_result: Temporary register for holding the matrix value during checking.
+
+
+
+
+Input Handling:
+Inputs are controlled by an FSM (Finite State Machine). States change on the rising edge of the clock (posedge clk) as explained below:
+
+o	Reset Handling:
+When rst is active, all registers are set back to their starting values. This clears the matrix and resets the state.
+o	Positive Edge Sampling:
+All tasks, like checking the enter signal and updating the matrix, happen inside an always block triggered by the rising edge of the clock (posedge clk). This makes sure inputs are handled in sync with the clock.
+
+Output Handling:
+The output signal Z is controlled as follows:
+
+o	Default Case (HOLD):
+When in the HOLD state or after a reset, z stays at 0 until the user presses enter to start an operation.
+
+o	Check State:
+The value of the matrix at the requested coordinate is stored in temp_result temporarily. On the next clock cycles, if enter stays high, z is updated with this value. This makes sure z shows the correct value only after the user asks for a specific coordinate.
+
+o	In the SET and CHECK states, the FSM updates z only during valid operations. This prevents z from changing too early or incorrectly.
+
+
+Results from Test Bench:
+You can view the simulation results as follows:
+
+ 
+Figure 1 - Result of Test Case 0
+ 
+Figure 2 - Result of Test Case 1
+ 
+Figure 3 - Results of Test Case 2
+ 
+Figure 4 - Results of Test Case 3
+ 
+Figure 5 - Results of Test Case 4
+ 
+Figure 6 - Results of Test Case 5
+ 
+Figure 7 - Results of Test Case 6
+
+
+
+
+
+
+
+ASM Representation:
+
+ 
+
+				
+Conclusion:
+This implementation uses an FSM to manage input handling and ensure synchronized control of the output. The design ensures:
+•	Inputs are processed on the rising edge of the clock.
+•	The output z stays at 0 until the user requests it using the enter signal.
+The implementation achieves its goals by handling inputs and outputs in an organized, clock-synchronized way.
+
