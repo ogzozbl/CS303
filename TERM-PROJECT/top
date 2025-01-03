@@ -1,0 +1,58 @@
+// DO NOT CHANGE THE NAME OR THE SIGNALS OF THIS MODULE
+
+module top (
+  input        clk    ,
+  input  [3:0] sw     ,
+  input  [3:0] btn    ,
+  output [7:0] led    ,
+  output [7:0] seven  ,
+  output [3:0] segment
+);
+
+/* Your module instantiations go to here. */
+
+wire my_clock;
+wire [3:0] my_button;
+
+wire [7:0] disp0;
+wire [7:0] disp1;
+wire [7:0] disp2;
+wire [7:0] disp3;
+
+clk_divider clock_divider(
+  .clk_in(clk),
+  .divided_clk(my_clock)
+);
+
+debouncer debouncer0(.clk(my_clock), .rst(!btn[2]), .noisy_in(!btn[0]), .clean_out(my_button[0]));
+debouncer debouncer1(.clk(my_clock), .rst(!btn[2]), .noisy_in(!btn[1]), .clean_out(my_button[1]));
+debouncer debouncer2(.clk(my_clock), .rst(!btn[2]), .noisy_in(!btn[2]), .clean_out(my_button[2]));
+debouncer debouncer3(.clk(my_clock), .rst(!btn[2]), .noisy_in(!btn[3]), .clean_out(my_button[3]));
+
+battleship main_battleship(
+  .clk(my_clock),
+  .rst(!btn[2]),
+  .start(my_button[1]),
+  .X(sw[3:2]),
+  .Y(sw[1:0]),
+  .pAb(my_button[3]),
+  .pBb(my_button[0]),
+  .disp0(disp0),
+  .disp1(disp1),
+  .disp2(disp2),
+  .disp3(disp3),
+  .led(led)
+);
+
+ssd display(
+  .clk(clk),
+  .disp0(disp0),
+  .disp1(disp1),
+  .disp2(disp2),
+  .disp3(disp3),
+  .seven(seven),
+  .segment(segment)
+
+);
+
+endmodule
