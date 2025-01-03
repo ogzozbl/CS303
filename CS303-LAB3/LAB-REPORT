@@ -1,0 +1,86 @@
+
+CS303 Logic & Digital System Design Lab Report
+
+Laboratory Assignment #3
+-
+15-bit Adder-Subtractor with Overflow Detector Circuit using Verilog
+Oğuz Özbal 32673
+
+
+
+Introduction:
+This report explains how we design 15-bit Carry Lookahead Adder/Subtractor using Verilog. In this project, 15-bit CLA is built using 5 3-bit CLA blocks. It can perform both addition and subtraction, depending on the mode of the block. The design is tested using a testbench, which check for 8 different possibilities, such as carry and overflow.
+
+Building Blocks:
+This design built around two main pieces:
+•	3-bit Carry Lookahead Adder (CLA_3bit):
+o	Capable of 3-bit addition or subtraction.
+o	Handles carry propagation and generation to speed up computations.
+o	Capable of changing between subtraction (mode = 1) and addition (mode = 0) with mode input.
+o	A 3-bit adder-subtractor is designed as building block for the 15-bit adder and it takes following inputs:
+	Two 3-bit integers: C and D.
+	A carry in Cin for the calculation.
+	A mode signal to choose operation.
+o	The outputs of this sub-module are:
+	RES as 3-bit result.
+	Cout as carry from the MSB.
+
+•	15-bit Carry Lookahead Adder (CLA_15bit_top):
+o	Uses 5 piece of CLA_3bit to achieve the 15-bit result.
+o	Combines carry signals between alongside CLA blocks.
+o	Includes overflow detection logic for addition and subtraction.
+o	Capable of changing between subtraction (mode = 1) and addition (mode = 0) with mode input as well.
+o	Inputs for this 15-bit CLA are:
+	Two 15- bit integers A and B.
+	A mode signal to choose operation.
+o	The outputs of this top module are:
+	S as the 15-bit result of the addition or subtraction.
+	Cout as carry from the MSB.
+	OVF, this is a flag for indicating if there is a signed overflow in the result.
+
+
+Testbench and Testing Examples:
+
+a. addition without a carry and without an overflow:
+Inputs are A = 25, B = 50, mode = 0.
+
+b. addition without a carry and with an overflow:
+Inputs are A = 16000, B = 1000, mode = 0.
+
+c. addition with a carry and without an overflow:
+Inputs are A = 16000, B = -7999, mode = 0.
+
+d. addition with a carry and with an overflow:
+Inputs are A = -10000, B = -8000, mode = 0.
+
+e. subtraction without a carry and without an overflow:
+Inputs are A = 30, B = 100, mode = 0.
+
+f. subtraction without a carry and with an overflow:
+Inputs are A = 1, B = -16384, mode = 0.
+
+g. subtraction with a carry and without an overflow:
+Inputs are A = -8000, B = -12000, mode = 0.
+
+h. subtraction with a carry and with an overflow:
+Inputs are A = -16384, B = 2, mode = 0.
+
+All the wanted testing scenarios are tested with these 8 different test cases.
+
+
+
+
+
+
+
+Results from Simulation: 
+You can view the simulation results as follows: 
+
+ 
+Figure 1 - Results from Simulation
+
+
+				
+Conclusion:
+In this lab, a 15-bit adder-subtractor was designed using a hierarchical approach with 3-bit modules. This modular design made the system more efficient and easier to manage. The design was tested with various inputs, and the results showed it works correctly for addition, subtraction, carry, and overflow cases. This project highlights the benefits of hierarchical design in simplifying complex systems.
+
